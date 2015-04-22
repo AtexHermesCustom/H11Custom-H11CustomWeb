@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Enumeration;
 import java.util.Properties;
-import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -30,8 +27,6 @@ import com.unisys.media.cr.common.data.interfaces.INodePK;
 import com.unisys.media.cr.common.data.types.IPropertyDefType;
 import com.unisys.media.cr.common.data.values.NodeTypePK;
 import com.unisys.media.extension.common.exception.NodeAlreadyLockedException;
-import com.unisys.media.extension.common.serialize.xml.XMLSerializeWriter;
-import com.unisys.media.extension.common.serialize.xml.XMLSerializeWriterException;
 import com.unisys.media.ncm.cfg.common.data.values.MetadataSchemaValue;
 import com.unisys.media.ncm.cfg.model.values.UserHermesCfgValueClient;
 

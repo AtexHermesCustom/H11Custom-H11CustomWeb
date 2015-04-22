@@ -31,7 +31,7 @@ import com.unisys.media.cr.adapter.ncm.model.data.datasource.NCMDataSource;
 public class ExportXMLServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	public static final String CONFIG_FILENAME = "h11-custom-web-export.properties";	
+	private static final String CONFIG_FILENAME = "h11-custom-web-export.properties";	
 	
     /**
      * @see HttpServlet#HttpServlet()

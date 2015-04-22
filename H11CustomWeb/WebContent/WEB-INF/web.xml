@@ -19,4 +19,14 @@
     <servlet-name>UpdateMetadataServlet</servlet-name>
     <url-pattern>/UpdateMetadataServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description>H11 Export XML</description>
+    <display-name>ExportXMLServlet</display-name>
+    <servlet-name>ExportXMLServlet</servlet-name>
+    <servlet-class>com.atex.h11.custom.web.export.ExportXMLServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExportXMLServlet</servlet-name>
+    <url-pattern>/ExportXMLServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

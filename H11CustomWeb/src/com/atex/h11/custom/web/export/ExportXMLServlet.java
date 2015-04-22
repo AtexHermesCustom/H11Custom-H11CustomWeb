@@ -1,10 +1,9 @@
-package com.atex.h11.custom.web.metadata;
+package com.atex.h11.custom.web.export;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -21,20 +20,19 @@ import com.unisys.media.cr.adapter.ncm.common.data.values.NCMObjectBuildProperti
 import com.unisys.media.cr.adapter.ncm.model.data.datasource.NCMDataSource;
 import com.unisys.media.cr.adapter.ncm.model.data.values.NCMObjectValueClient;
 import com.unisys.media.extension.common.serialize.xml.XMLSerializeWriter;
-import com.unisys.media.extension.common.serialize.xml.XMLSerializeWriterException;
 
 /**
- * Servlet implementation class UpdateMetadataServlet
+ * Servlet implementation class ExportServlet
  */
-public class UpdateMetadataServlet extends HttpServlet {
+public class ExportXMLServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	public static final String CONFIG_FILENAME = "h11-custom-web-metadata.properties";	
+       
+	public static final String CONFIG_FILENAME = "h11-custom-web-export.properties";	
 	
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UpdateMetadataServlet() {
+    public ExportXMLServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -136,6 +134,6 @@ public class UpdateMetadataServlet extends HttpServlet {
         }
 
         return props;
-    }		
+    }			
 
 }

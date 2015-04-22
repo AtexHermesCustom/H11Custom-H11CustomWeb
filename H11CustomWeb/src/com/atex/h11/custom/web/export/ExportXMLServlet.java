@@ -170,6 +170,8 @@ public class ExportXMLServlet extends HttpServlet {
             	throw new IllegalArgumentException("Usupported node type");
             }        	
             
+            log("Export completed");
+            
         } catch (Exception e) {
             log("Exception encountered", e);
             response.sendError(HttpServletResponse.SC_CONFLICT, e.toString());
@@ -192,7 +194,7 @@ public class ExportXMLServlet extends HttpServlet {
         try {
             props.load(new FileInputStream(propsFile));
         } catch (FileNotFoundException fnf) {
-            log("Properties file " + propsFile.getPath() + " not found.", fnf);
+            log("Properties file " + propsFile.getPath() + " not found", fnf);
             throw fnf;
         }
 

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -79,7 +80,7 @@ public class UpdateMetadataServlet extends HttpServlet {
         String metaField = request.getParameter("field");
         String metaValue = request.getParameter("value");
 
-        log(request.getParameterMap().toString());  // For debugging only
+        log("processRequest: params=" + request.getParameterMap().toString());  // For debugging only
 
         Properties props = getProperties();
         
@@ -104,7 +105,7 @@ public class UpdateMetadataServlet extends HttpServlet {
 
     		NCMObjectPK pk = new NCMObjectPK(Integer.parseInt(id));
     		NCMObjectValueClient objVC = (NCMObjectValueClient) ((NCMDataSource)ds).getNode(pk, objProps);
-    		log("Object retrieved: name=" + objVC.getNCMName() + ", type=" + objVC.getType() + ", pk=" + objVC.getPK().toString());
+    		log("processRequest: Object retrieved: name=" + objVC.getNCMName() + ", type=" + objVC.getType() + ", pk=" + objVC.getPK().toString());
         	
     		setMetadata(objVC, metaSchema, metaField, metaValue);
     		
@@ -114,6 +115,16 @@ public class UpdateMetadataServlet extends HttpServlet {
         } else {
         	throw new IllegalArgumentException("Usupported node type");
         }
+        
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>Update Metadata</title>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println("<p>Metadata for object with id=" + id + "updated</p>");
+        out.println("<p>" + metaSchema + "." + metaField + "=" + metaValue + "</p>");
+        out.println("</body>");
+        out.println("</html>");   
 	}
 	
     protected Properties getProperties () throws IOException {
@@ -126,7 +137,7 @@ public class UpdateMetadataServlet extends HttpServlet {
         try {
             props.load(new FileInputStream(propsFile));
         } catch (FileNotFoundException fnf) {
-            log("Properties file " + propsFile.getPath() + " not found.", fnf);
+            log("getProperties: Properties file " + propsFile.getPath() + " not found", fnf);
             throw fnf;
         }
 
@@ -136,8 +147,8 @@ public class UpdateMetadataServlet extends HttpServlet {
 	protected void setMetadata(NCMObjectValueClient objVC, String metaSchema, String metaField, String metaValue) {
 		String objName = objVC.getNCMName();
 		Integer objId = getObjIdFromPK(objVC.getPK());
-		log("setMetadata: Object [" + objId.toString() + "," + objName + "," + Integer.toString(objVC.getType()) + "]" +
-			", Meta=" + metaSchema + "." + metaField + ", Value=" + metaValue);
+		log("setMetadata: object [" + objId.toString() + "," + objName + "," + Integer.toString(objVC.getType()) + "]" +
+			", meta=" + metaSchema + "." + metaField + ", value=" + metaValue);
 		
 		UserHermesCfgValueClient cfg = ds.getUserHermesCfg();
 		

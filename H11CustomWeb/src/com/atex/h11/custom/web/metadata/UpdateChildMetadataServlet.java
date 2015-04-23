@@ -90,7 +90,7 @@ public class UpdateChildMetadataServlet extends UpdateMetadataServlet {
         out.println("<title>Update Child Metadata</title>");
         out.println("</head>");
         out.println("<body>");
-        out.println("<h1>Update Metadata</h1>");
+        out.println("<h1>Update Child Metadata</h1>");
         out.println("<p>Metadata for children of package with id=" + objId + " updated</p>");
         out.println("<p>Set: " + metaSchema + "." + metaField + "=" + metaValue + "</p>");
         out.println("</body>");

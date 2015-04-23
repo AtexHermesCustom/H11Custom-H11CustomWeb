@@ -36,7 +36,8 @@ import com.unisys.media.ncm.cfg.model.values.UserHermesCfgValueClient;
 public class UpdateMetadataServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	protected static final String CONFIG_FILENAME = "h11-custom-web-metadata.properties";	
+	protected static final String CONFIG_FILENAME = "h11-custom-web-metadata.properties";
+	protected Properties props = null;
     protected NCMDataSource ds = null;
     
     protected String user;
@@ -103,7 +104,7 @@ public class UpdateMetadataServlet extends HttpServlet {
         	throw new IllegalArgumentException("Missing parameter: value");
         }        
         
-        Properties props = getProperties();
+        props = getProperties();
         
         if (sessionId != null) {
             ds = (NCMDataSource) DataSource.newInstance(sessionId);

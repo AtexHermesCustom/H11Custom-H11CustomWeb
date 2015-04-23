@@ -1,6 +1,8 @@
 package com.atex.h11.custom.web.metadata;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -33,18 +35,25 @@ public class UpdateChildMetadataServlet extends UpdateMetadataServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		processRequest(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		processRequest(request, response);
 	}
 	
 	@Override
     protected void update() {
+		// get list of object types for metadata update
+		String typesForUpdateProp = props.getProperty("typesForMetadataUpdate");
+        if (typesForUpdateProp == null || typesForUpdateProp.isEmpty()) {
+        	throw new IllegalStateException("Missing property: typesForMetadataUpdate");
+        }
+		List<String> typesForUpdate = Arrays.asList(typesForUpdateProp.split(","));
+		
 		NCMObjectBuildProperties spProps = new NCMObjectBuildProperties();
 		spProps.setGetByObjId(true);
 		spProps.setDoNotChekPermissions(true);
@@ -54,8 +63,7 @@ public class UpdateChildMetadataServlet extends UpdateMetadataServlet {
 		NCMObjectValueClient sp = (NCMObjectValueClient) ((NCMDataSource)ds).getNode(pk, spProps);
 		log("update: Parent package retrieved: name=" + sp.getNCMName() + ", type=" + sp.getType() + ", pk=" + sp.getPK().toString());
     	
-		// get child objects
-		INodePK[] childPKs = sp.getChildPKs();
+		INodePK[] childPKs = sp.getChildPKs(); 		// get child objects
 		if (childPKs != null) {
 			NCMObjectBuildProperties objProps = new NCMObjectBuildProperties();
 			objProps.setGetByObjId(true);
@@ -67,7 +75,7 @@ public class UpdateChildMetadataServlet extends UpdateMetadataServlet {
 				NCMObjectValueClient child = (NCMObjectValueClient) ds.getNode(childPK, objProps);
 				log("update: Child object retrieved: name=" + child.getNCMName() + ", type=" + child.getType() + ", pk=" + child.getPK().toString());
 		
-				if (child.getType() == NCMObjectNodeType.OBJ_TEXT) {
+				if (typesForUpdate.contains(Integer.toString(child.getType()))) {
 					setMetadata(child, metaSchema, metaField, metaValue);		// update metadata
 				}
 			}

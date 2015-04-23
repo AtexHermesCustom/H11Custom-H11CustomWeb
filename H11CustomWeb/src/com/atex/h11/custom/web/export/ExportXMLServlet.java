@@ -70,8 +70,8 @@ public class ExportXMLServlet extends HttpServlet {
         
         Properties props = getProperties();
         
-        String convertFormat = props.getProperty("convert.format", "Neutral");
-        String outDir = props.getProperty("output.dir");
+        String convertFormat = props.getProperty("convertFormat", "Neutral");
+        String outDir = props.getProperty("outputDir");
         if (outDir == null || outDir.isEmpty()) {
         	throw new IllegalArgumentException("Output directory not defined");
         }

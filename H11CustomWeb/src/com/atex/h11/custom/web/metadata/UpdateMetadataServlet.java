@@ -36,9 +36,17 @@ import com.unisys.media.ncm.cfg.model.values.UserHermesCfgValueClient;
 public class UpdateMetadataServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private static final String CONFIG_FILENAME = "h11-custom-web-metadata.properties";	
-    private NCMDataSource ds = null;
-	
+	protected static final String CONFIG_FILENAME = "h11-custom-web-metadata.properties";	
+    protected NCMDataSource ds = null;
+    
+    protected String user;
+    protected String password;
+    protected String sessionId;
+    protected String nodeType;
+    protected String objId;
+    protected String metaSchema;
+    protected String metaField;
+    protected String metaValue;
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -66,14 +74,14 @@ public class UpdateMetadataServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         ServletOutputStream out = response.getOutputStream();
 
-        String user = request.getParameter("user");
-        String password = request.getParameter("password");
-        String sessionId = request.getParameter("sessionid");
-        String nodeType = request.getParameter("nodetype");
-        String id = request.getParameter("id");
-        String metaSchema = request.getParameter("schema");
-        String metaField = request.getParameter("field");
-        String metaValue = request.getParameter("value");
+        user = request.getParameter("user");
+        password = request.getParameter("password");
+        sessionId = request.getParameter("sessionid");
+        nodeType = request.getParameter("nodetype");
+        objId = request.getParameter("id");
+        metaSchema = request.getParameter("schema");
+        metaField = request.getParameter("field");
+        metaValue = request.getParameter("value");
 
         log("processRequest: params=" + request.getParameterMap().toString());  // For debugging only
 
@@ -98,7 +106,7 @@ public class UpdateMetadataServlet extends HttpServlet {
     		objProps.setDoNotChekPermissions(true);
     		//objProps.setIncludeMetadataGroups(new Vector<String>());
 
-    		NCMObjectPK pk = new NCMObjectPK(Integer.parseInt(id));
+    		NCMObjectPK pk = new NCMObjectPK(Integer.parseInt(objId));
     		NCMObjectValueClient objVC = (NCMObjectValueClient) ((NCMDataSource)ds).getNode(pk, objProps);
     		log("processRequest: Object retrieved: name=" + objVC.getNCMName() + ", type=" + objVC.getType() + ", pk=" + objVC.getPK().toString());
         	
@@ -111,15 +119,7 @@ public class UpdateMetadataServlet extends HttpServlet {
         	throw new IllegalArgumentException("Usupported node type");
         }
         
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<title>Update Metadata</title>");
-        out.println("</head>");
-        out.println("<body>");
-        out.println("<p>Metadata for object with id=" + id + "updated</p>");
-        out.println("<p>" + metaSchema + "." + metaField + "=" + metaValue + "</p>");
-        out.println("</body>");
-        out.println("</html>");   
+        showOutputMessage(out);
 	}
 	
     protected Properties getProperties () throws IOException {
@@ -195,5 +195,17 @@ public class UpdateMetadataServlet extends HttpServlet {
 			s = s.substring(0, delimIdx);
 		return Integer.parseInt(s);
 	}	        
+	
+	protected void showOutputMessage(ServletOutputStream out) throws IOException {
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>Update Metadata</title>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println("<p>Metadata for object with id=" + objId + "updated</p>");
+        out.println("<p>" + metaSchema + "." + metaField + "=" + metaValue + "</p>");
+        out.println("</body>");
+        out.println("</html>");   		
+	}
 
 }

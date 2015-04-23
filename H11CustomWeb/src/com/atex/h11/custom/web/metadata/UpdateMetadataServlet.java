@@ -42,8 +42,7 @@ public class UpdateMetadataServlet extends HttpServlet {
     protected String user;
     protected String password;
     protected String sessionId;
-    protected String nodeType;
-    protected String objId;
+    protected int objId;
     protected String metaSchema;
     protected String metaField;
     protected String metaValue;
@@ -77,67 +76,65 @@ public class UpdateMetadataServlet extends HttpServlet {
         user = request.getParameter("user");
         password = request.getParameter("password");
         sessionId = request.getParameter("sessionid");
-        nodeType = request.getParameter("nodetype");
-        objId = request.getParameter("id");
+        String objIdString = request.getParameter("id");
         metaSchema = request.getParameter("schema");
         metaField = request.getParameter("field");
         metaValue = request.getParameter("value");
 
         log("processRequest: params=" + request.getParameterMap().toString());  // For debugging only
 
-        Properties props = getProperties();
-        
-        // default credentials
-        if (user == null && password == null) {
-        	user = props.getProperty("user");
-        	password = props.getProperty("password");
+        // check parameters
+        if (objIdString == null || objIdString.isEmpty()) {
+        	throw new IllegalArgumentException("Missing parameter: id");
+        } else {
+        	try {
+        		objId = Integer.parseInt(objIdString);
+        	} catch (NumberFormatException e) {
+        		throw new IllegalArgumentException("Illegal value for parameter: id");
+        	}
         }
+        if (metaSchema == null || metaSchema.isEmpty()) {
+        	throw new IllegalArgumentException("Missing parameter: schema");
+        }
+        if (metaField == null || metaField.isEmpty()) {
+        	throw new IllegalArgumentException("Missing parameter: field");
+        }
+        if (metaValue == null || metaValue.isEmpty()) {
+        	throw new IllegalArgumentException("Missing parameter: value");
+        }        
+        
+        Properties props = getProperties();
         
         if (sessionId != null) {
             ds = (NCMDataSource) DataSource.newInstance(sessionId);
         } else {
+            if (user == null && password == null) {            // default credentials
+            	user = props.getProperty("user");
+            	password = props.getProperty("password");
+            }            
             ds = (NCMDataSource) DataSource.newInstance(user, password);
-        }
-               
-        if (nodeType.equalsIgnoreCase(Constants.NODETYPE_OBJECT) || nodeType.equalsIgnoreCase(Constants.NODETYPE_SP)) {
-    		NCMObjectBuildProperties objProps = new NCMObjectBuildProperties();
-    		objProps.setGetByObjId(true);
-    		objProps.setIncludeSpChild(true);
-    		objProps.setDoNotChekPermissions(true);
-    		//objProps.setIncludeMetadataGroups(new Vector<String>());
-
-    		NCMObjectPK pk = new NCMObjectPK(Integer.parseInt(objId));
-    		NCMObjectValueClient objVC = (NCMObjectValueClient) ((NCMDataSource)ds).getNode(pk, objProps);
-    		log("processRequest: Object retrieved: name=" + objVC.getNCMName() + ", type=" + objVC.getType() + ", pk=" + objVC.getPK().toString());
-        	
-    		setMetadata(objVC, metaSchema, metaField, metaValue);
-    		
-        } else if (nodeType.equalsIgnoreCase(Constants.NODETYPE_LOGPAGE)) {
-        	// to do: for logpage
-        	
-        } else {
-        	throw new IllegalArgumentException("Usupported node type");
+        
         }
         
+        // perform update
+        update();
+		
+        // output message
         showOutputMessage(out);
 	}
-	
-    protected Properties getProperties () throws IOException {
-        Properties props = new Properties();
+    
+    protected void update() {
+		NCMObjectBuildProperties objProps = new NCMObjectBuildProperties();
+		objProps.setGetByObjId(true);
+		objProps.setDoNotChekPermissions(true);
+		//objProps.setIncludeMetadataGroups(new Vector<String>());
 
-        String jbossHomeDir = System.getProperty(Constants.JBOSS_HOMEDIR_PROPERTY);
-        File propsFile = new File(jbossHomeDir + File.separator + Constants.CONFIG_DIR 
-        		+ File.separator + CONFIG_FILENAME);
-                
-        try {
-            props.load(new FileInputStream(propsFile));
-        } catch (FileNotFoundException fnf) {
-            log("getProperties: Properties file " + propsFile.getPath() + " not found", fnf);
-            throw fnf;
-        }
-
-        return props;
-    }		
+		NCMObjectPK pk = new NCMObjectPK(objId);
+		NCMObjectValueClient objVC = (NCMObjectValueClient) ((NCMDataSource)ds).getNode(pk, objProps);
+		log("update: Object retrieved: name=" + objVC.getNCMName() + ", type=" + objVC.getType() + ", pk=" + objVC.getPK().toString());
+    	
+		setMetadata(objVC, metaSchema, metaField, metaValue);    	
+    }
     
 	protected void setMetadata(NCMObjectValueClient objVC, String metaSchema, String metaField, String metaValue) {
 		String objName = objVC.getNCMName();
@@ -195,6 +192,23 @@ public class UpdateMetadataServlet extends HttpServlet {
 			s = s.substring(0, delimIdx);
 		return Integer.parseInt(s);
 	}	        
+	
+    protected Properties getProperties () throws IOException {
+        Properties props = new Properties();
+
+        String jbossHomeDir = System.getProperty(Constants.JBOSS_HOMEDIR_PROPERTY);
+        File propsFile = new File(jbossHomeDir + File.separator + Constants.CONFIG_DIR 
+        		+ File.separator + CONFIG_FILENAME);
+                
+        try {
+            props.load(new FileInputStream(propsFile));
+        } catch (FileNotFoundException fnf) {
+            log("getProperties: Properties file " + propsFile.getPath() + " not found", fnf);
+            throw fnf;
+        }
+
+        return props;
+    }	
 	
 	protected void showOutputMessage(ServletOutputStream out) throws IOException {
         out.println("<html>");

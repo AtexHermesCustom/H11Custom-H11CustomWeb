@@ -75,16 +75,14 @@ public class ExportXMLServlet extends HttpServlet {
         if (outDir == null || outDir.isEmpty()) {
         	throw new IllegalArgumentException("Output directory not defined");
         }
-        
-        // default credentials
-        if (user == null && password == null) {
-        	user = props.getProperty("user");
-        	password = props.getProperty("password");
-        }
                        
         if (sessionId != null) {
             ds = (NCMDataSource) DataSource.newInstance(sessionId);
         } else {
+            if (user == null && password == null) {            // default credentials
+            	user = props.getProperty("user");
+            	password = props.getProperty("password");
+            }            
             ds = (NCMDataSource) DataSource.newInstance(user, password);
         }
                

@@ -217,6 +217,7 @@ public class UpdateMetadataServlet extends HttpServlet {
         out.println("<title>Update Metadata</title>");
         out.println("</head>");
         out.println("<body>");
+        out.println("<h1>Update Metadata</h1>");
         out.println("<p>Metadata for object with id=" + objId + " updated</p>");
         out.println("<p>Set: " + metaSchema + "." + metaField + "=" + metaValue + "</p>");
         out.println("</body>");

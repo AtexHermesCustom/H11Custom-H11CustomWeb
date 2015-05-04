@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.atex.h11.custom.web</groupId>
+  <artifactId>H11CustomWeb</artifactId>
+  <version>1.0.0</version>
+  <packaging>war</packaging>
+  <name>H11CustomWeb</name>
+  <description>H11 Custom Web</description>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.3</version>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <h11.lib.path>C:/Hermes11/lib</h11.lib.path>
+  </properties>  
+  
+  <dependencies>
+    <dependency>
+    	<groupId>javax.servlet</groupId>
+    	<artifactId>servlet-api</artifactId>
+    	<version>2.5</version>
+    	<scope>provided</scope>
+    </dependency>  
+    <dependency>
+      <groupId>com.unisys.media</groupId>
+      <artifactId>cr-all-client-103</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>${h11.lib.path}/cr-all-client103.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.unisys.media</groupId>
+      <artifactId>jbossall-client</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>${h11.lib.path}/jbossall-client.jar</systemPath>
+    </dependency>   
+    <dependency>
+      <groupId>com.unisys.media</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>${h11.lib.path}/commons-logging.jar</systemPath>
+    </dependency>       
+    <dependency>
+    	<groupId>com.atex.h11.custom</groupId>
+    	<artifactId>h11-custom-lib</artifactId>
+    	<version>1.0.0</version>
+    </dependency>
+  </dependencies>    
+</project>

@@ -76,12 +76,16 @@ public class UpdateChildMultiMetadataServlet extends UpdateMultiMetadataServlet 
 			for (int i = 0; i < childPKs.length; i++ ) {
 				NCMObjectPK childPK = new NCMObjectPK(getObjIdFromPK(childPKs[i]));
 				NCMObjectValueClient child = (NCMObjectValueClient) ds.getNode(childPK, objProps);
-				log("update: Child object retrieved: name=" + child.getNCMName() + ", type=" + child.getType() + ", pk=" + child.getPK().toString());
 		
 				if (typesForUpdate.contains(Integer.toString(child.getType()))) {
 				    Iterator <JSONObject> iter = jsonMetadata.iterator();
 				    while (iter.hasNext()) {
 				    	JSONObject obj = iter.next();
+
+				    	// need to be within the loop, always get the latest copy
+						child = (NCMObjectValueClient) ds.getNode(childPK, objProps);
+						log("update: Child object retrieved: name=" + child.getNCMName() + ", type=" + child.getType() + ", pk=" + child.getPK().toString());
+				    	
 				    	setMetadata(child, (String) obj.get("schema"), (String) obj.get("field"), (String) obj.get("value"));	// update metadata
 				    }	
 				}

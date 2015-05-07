@@ -2,6 +2,7 @@ package com.atex.h11.custom.web.metadata;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -102,15 +103,18 @@ public class UpdateMultiMetadataServlet extends UpdateMetadataServlet {
 		NCMObjectBuildProperties objProps = new NCMObjectBuildProperties();
 		objProps.setGetByObjId(true);
 		objProps.setDoNotChekPermissions(true);
-		//objProps.setIncludeMetadataGroups(new Vector<String>());
-
-		NCMObjectPK pk = new NCMObjectPK(objId);
-		NCMObjectValueClient objVC = (NCMObjectValueClient) ((NCMDataSource)ds).getNode(pk, objProps);
-		log("update: Object retrieved: name=" + objVC.getNCMName() + ", type=" + objVC.getType() + ", pk=" + objVC.getPK().toString());
+		objProps.setIncludeMetadataGroups(new Vector<String>());
     	
-	    Iterator <JSONObject> iter = jsonMetadata.iterator();
-	    while (iter.hasNext()) {
+		NCMObjectPK pk = new NCMObjectPK(objId);
+
+		Iterator <JSONObject> iter = jsonMetadata.iterator();
+	    while (iter.hasNext()) {	    	
 	    	JSONObject obj = iter.next();
+	    	
+	    	// need to be within the loop, always get the latest copy
+			NCMObjectValueClient objVC = (NCMObjectValueClient) ((NCMDataSource)ds).getNode(pk, objProps);
+			log("update: Object retrieved: name=" + objVC.getNCMName() + ", type=" + objVC.getType() + ", pk=" + objVC.getPK().toString());
+	    	
 	    	setMetadata(objVC, (String) obj.get("schema"), (String) obj.get("field"), (String) obj.get("value"));	// update metadata
 	    }		    	
     }	

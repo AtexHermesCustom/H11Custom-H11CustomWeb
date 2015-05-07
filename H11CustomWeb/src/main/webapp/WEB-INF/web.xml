@@ -18,13 +18,7 @@
   <servlet-mapping>
     <servlet-name>ExportXMLServlet</servlet-name>
     <url-pattern>/ExportXMLServlet</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ExportXMLServlet</servlet-name>
     <url-pattern>/ExportXML</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ExportXMLServlet</servlet-name>
     <url-pattern>/exportxml</url-pattern>
   </servlet-mapping>
   <servlet>
@@ -36,15 +30,9 @@
   <servlet-mapping>
     <servlet-name>UpdateMetadataServlet</servlet-name>
     <url-pattern>/UpdateMetadataServlet</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>UpdateMetadataServlet</servlet-name>
     <url-pattern>/UpdateMetadata</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>UpdateMetadataServlet</servlet-name>
     <url-pattern>/updatemetadata</url-pattern>
-  </servlet-mapping>  
+  </servlet-mapping>
   <servlet>
     <description>H11 Update Child Metadata Servlet</description>
     <display-name>UpdateChildMetadataServlet</display-name>
@@ -54,13 +42,31 @@
   <servlet-mapping>
     <servlet-name>UpdateChildMetadataServlet</servlet-name>
     <url-pattern>/UpdateChildMetadataServlet</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>UpdateChildMetadataServlet</servlet-name>
     <url-pattern>/UpdateChildMetadata</url-pattern>
-  </servlet-mapping> 
-  <servlet-mapping>
-    <servlet-name>UpdateChildMetadataServlet</servlet-name>
     <url-pattern>/updatechildmetadata</url-pattern>
-  </servlet-mapping>     
+  </servlet-mapping>
+  <servlet>
+    <description>H11 Update Multiple Metadata Servlet</description>
+    <display-name>UpdateMultiMetadataServlet</display-name>
+    <servlet-name>UpdateMultiMetadataServlet</servlet-name>
+    <servlet-class>com.atex.h11.custom.web.metadata.UpdateMultiMetadataServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UpdateMultiMetadataServlet</servlet-name>
+    <url-pattern>/UpdateMultiMetadataServlet</url-pattern>
+    <url-pattern>/UpdateMultiMetadata</url-pattern>
+    <url-pattern>/updatemultimetadata</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>H11 Update Child Multiple Metadata Servlet</description>
+    <display-name>UpdateChildMultiMetadataServlet</display-name>
+    <servlet-name>UpdateChildMultiMetadataServlet</servlet-name>
+    <servlet-class>com.atex.h11.custom.web.metadata.UpdateChildMultiMetadataServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UpdateChildMultiMetadataServlet</servlet-name>
+    <url-pattern>/UpdateChildMultiMetadataServlet</url-pattern>
+    <url-pattern>/UpdateChildMultiMetadata</url-pattern>
+    <url-pattern>/updatechildmultimetadata</url-pattern>
+  </servlet-mapping>
 </web-app>

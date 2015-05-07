@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.atex.h11.custom.web</groupId>
-  <artifactId>h11customweb</artifactId>
+  <artifactId>h11-custom-web</artifactId>
   <version>1.0.0</version>
   <packaging>war</packaging>
-  <name>h11customweb</name>
+  <name>h11-custom-web</name>
   <description>H11 Custom Web</description>
 
   <build>
@@ -37,6 +37,11 @@
     	<version>2.5</version>
     	<scope>provided</scope>
     </dependency>  
+	<dependency>
+		<groupId>com.googlecode.json-simple</groupId>
+		<artifactId>json-simple</artifactId>
+		<version>1.1.1</version>
+	</dependency>    
     <dependency>
       <groupId>com.unisys.media</groupId>
       <artifactId>cr-all-client-103</artifactId>
@@ -62,6 +67,6 @@
     	<groupId>com.atex.h11.custom</groupId>
     	<artifactId>h11-custom-lib</artifactId>
     	<version>1.0.0</version>
-    </dependency>
+    </dependency>	    
   </dependencies>    
 </project>

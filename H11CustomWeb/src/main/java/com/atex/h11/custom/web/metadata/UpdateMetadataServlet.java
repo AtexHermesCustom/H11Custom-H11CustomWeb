@@ -28,6 +28,7 @@ import com.unisys.media.cr.adapter.ncm.model.data.values.NCMObjectValueClient;
 import com.unisys.media.cr.common.data.interfaces.INodePK;
 import com.unisys.media.cr.common.data.types.IPropertyDefType;
 import com.unisys.media.cr.common.data.values.NodeTypePK;
+import com.unisys.media.cr.model.data.values.IPropertyValueClient;
 import com.unisys.media.extension.common.exception.NodeAlreadyLockedException;
 import com.unisys.media.ncm.cfg.common.data.values.MetadataSchemaValue;
 import com.unisys.media.ncm.cfg.model.values.UserHermesCfgValueClient;
@@ -161,39 +162,43 @@ public class UpdateMetadataServlet extends HttpServlet {
 		
 		// Get metadata property
 		IPropertyDefType metaGroupDefType = ds.getPropertyDefType(metaSchema);
-		//IPropertyValueClient metaGroupPK = objVC.getProperty(metaGroupDefType.getPK());		
+		IPropertyValueClient metaGroupPK = objVC.getProperty(metaGroupDefType.getPK());		
 		
-		// Get metadata manager
-		INCMMetadataNodeManager metaMgr = null;
-		NodeTypePK PK = new NodeTypePK(NCMDataSourceDescriptor.NODETYPE_NCMMETADATA);
-		metaMgr = (INCMMetadataNodeManager) ds.getNodeManager(PK);		
-		
-		NCMMetadataPropertyValue pValue = new NCMMetadataPropertyValue(
-				metaGroupDefType.getPK(), null, schema);
-		pValue.setMetadataValue(metaField, metaValue);
-		NCMCustomMetadataPK cmPk = new NCMCustomMetadataPK(
-				objId, (short) objVC.getType(), schemaId);
-		schemaId = schema.getId();
-		NCMCustomMetadataPK[] nodePKs = new NCMCustomMetadataPK[] { cmPk };
-		
-		try {
+		if (metaGroupPK != null) {
+			// Get metadata manager
+			INCMMetadataNodeManager metaMgr = null;
+			NodeTypePK PK = new NodeTypePK(NCMDataSourceDescriptor.NODETYPE_NCMMETADATA);
+			metaMgr = (INCMMetadataNodeManager) ds.getNodeManager(PK);		
+			
+			NCMMetadataPropertyValue pValue = new NCMMetadataPropertyValue(
+					metaGroupDefType.getPK(), null, schema);
+			pValue.setMetadataValue(metaField, metaValue);
+			NCMCustomMetadataPK cmPk = new NCMCustomMetadataPK(
+					objId, (short) objVC.getType(), schemaId);
+			schemaId = schema.getId();
+			NCMCustomMetadataPK[] nodePKs = new NCMCustomMetadataPK[] { cmPk };
+			
 			try {
-				metaMgr.lockMetadataGroup(schemaId, nodePKs);
-			} catch (NodeAlreadyLockedException e) {
-			}
-			NCMCustomMetadataJournal j = new NCMCustomMetadataJournal();
-			j.setCreateDuringUpdate(true);
-			metaMgr.updateMetadataGroup(schemaId, nodePKs, pValue, j);
-			log("setMetadata: Update metadata successful for [" + objId.toString() + "," + objName + "," + Integer.toString(objVC.getType()) + "]");
-		} catch (Exception e) {
-			log("setMetadata: Update metadata failed for [" + objId.toString() + "," + objName + "," + Integer.toString(objVC.getType()) + "]: ", 
-				e);
-		} finally {
-			try {
-				metaMgr.unlockMetadataGroup(schemaId, nodePKs);
+				try {
+					metaMgr.lockMetadataGroup(schemaId, nodePKs);
+				} catch (NodeAlreadyLockedException e) {
+				}
+				NCMCustomMetadataJournal j = new NCMCustomMetadataJournal();
+				j.setCreateDuringUpdate(true);
+				metaMgr.updateMetadataGroup(schemaId, nodePKs, pValue, j);
+				log("setMetadata: Update metadata successful for [" + objId.toString() + "," + objName + "," + Integer.toString(objVC.getType()) + "]");
 			} catch (Exception e) {
-			}
-		}			
+				log("setMetadata: Update metadata failed for [" + objId.toString() + "," + objName + "," + Integer.toString(objVC.getType()) + "]: ", 
+					e);
+			} finally {
+				try {
+					metaMgr.unlockMetadataGroup(schemaId, nodePKs);
+				} catch (Exception e) {
+				}
+			}			
+		} else {
+			log("setMetadata: Update metadata failed for [" + objId.toString() + "," + objName + "," + Integer.toString(objVC.getType()) + "]: Metadata does not exist");
+		}
 	}	
 	
 	protected int getObjIdFromPK(INodePK pk) {

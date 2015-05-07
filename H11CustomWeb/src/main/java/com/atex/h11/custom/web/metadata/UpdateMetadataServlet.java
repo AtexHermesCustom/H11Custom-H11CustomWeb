@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
@@ -71,9 +73,11 @@ public class UpdateMetadataServlet extends HttpServlet {
 	}
 	
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        logParameters(request.getParameterMap());
+		
         response.setContentType("text/html;charset=UTF-8");
         ServletOutputStream out = response.getOutputStream();
-
+        
         user = request.getParameter("user");
         password = request.getParameter("password");
         sessionId = request.getParameter("sessionid");
@@ -81,8 +85,6 @@ public class UpdateMetadataServlet extends HttpServlet {
         metaSchema = request.getParameter("schema");
         metaField = request.getParameter("field");
         metaValue = request.getParameter("value");
-
-        log("processRequest: params=" + request.getParameterMap().toString());  // For debugging only
 
         // check parameters
         if (objIdString == null || objIdString.isEmpty()) {
@@ -106,22 +108,30 @@ public class UpdateMetadataServlet extends HttpServlet {
         
         props = getProperties();
         
-        if (sessionId != null) {
-            ds = (NCMDataSource) DataSource.newInstance(sessionId);
-        } else {
-            if (user == null && password == null) {            // default credentials
-            	user = props.getProperty("user");
-            	password = props.getProperty("password");
-            }            
-            ds = (NCMDataSource) DataSource.newInstance(user, password);
-        
-        }
+        // get the datasource
+        ds = getDatasource();
         
         // perform update
         update();
 		
         // output message
         showOutputMessage(out);
+	}
+	
+	protected NCMDataSource getDatasource() throws FileNotFoundException, IOException {
+		NCMDataSource dataSource = null;
+		
+        if (sessionId != null) {
+        	dataSource = (NCMDataSource) DataSource.newInstance(sessionId);
+        } else {
+            if (user == null && password == null) {            // default credentials
+            	user = props.getProperty("user");
+            	password = props.getProperty("password");
+            }            
+            dataSource = (NCMDataSource) DataSource.newInstance(user, password);
+        }
+        
+        return dataSource;
 	}
     
     protected void update() {
@@ -211,6 +221,19 @@ public class UpdateMetadataServlet extends HttpServlet {
         return props;
     }	
 	
+    protected void logParameters(Map map) {
+        String params = "";
+        int i = 0;
+        for (Object key: map.keySet()) {
+        	String keyStr = (String) key;
+            String[] value = (String[]) map.get(keyStr);
+            if (i > 0) { params += ","; }
+            params += (keyStr + "=" + Arrays.toString(value));
+            i++;
+        }        
+        log("parameters: " + params);  // For debugging    	
+    }
+    
 	protected void showOutputMessage(ServletOutputStream out) throws IOException {
         out.println("<html>");
         out.println("<head>");

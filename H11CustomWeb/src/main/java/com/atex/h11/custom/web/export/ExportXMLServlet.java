@@ -6,7 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
@@ -56,6 +58,8 @@ public class ExportXMLServlet extends HttpServlet {
 	}
 	
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		logParameters(request.getParameterMap());
+		
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
@@ -64,9 +68,7 @@ public class ExportXMLServlet extends HttpServlet {
         String user = request.getParameter("user");
         String password = request.getParameter("password");
         String sessionId = request.getParameter("sessionid");
-        String nodeType = request.getParameter("nodetype");
-
-        log(request.getParameterMap().toString());  // For debugging only       
+        String nodeType = request.getParameter("nodetype");   
         
         Properties props = getProperties();
         
@@ -198,6 +200,19 @@ public class ExportXMLServlet extends HttpServlet {
 
         return props;
     }			
+    
+    protected void logParameters(Map map) {
+        String params = "";
+        int i = 0;
+        for (Object key: map.keySet()) {
+        	String keyStr = (String) key;
+            String[] value = (String[]) map.get(keyStr);
+            if (i > 0) { params += ","; }
+            params += (keyStr + "=" + Arrays.toString(value));
+            i++;
+        }        
+        log("parameters: " + params);  // For debugging    	
+    }    
     
     protected void showOutputMessage(PrintWriter out, String outFile, HttpServletRequest request) {
         out.println("<html>");

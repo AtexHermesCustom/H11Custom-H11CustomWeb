@@ -61,7 +61,7 @@ public class UpdateMultiMetadataServlet extends UpdateMetadataServlet {
         password = request.getParameter("password");
         sessionId = request.getParameter("sessionid");
         String objIdString = request.getParameter("id");
-        jsonParams = request.getParameter("jsonParams");
+        jsonParams = request.getParameter("metadata");
 
         // check parameters
         if (objIdString == null || objIdString.isEmpty()) {
@@ -75,14 +75,14 @@ public class UpdateMultiMetadataServlet extends UpdateMetadataServlet {
         }
         
         if (jsonParams == null || jsonParams.isEmpty()) {
-        	throw new IllegalArgumentException("Missing parameter: jsonParams");
+        	throw new IllegalArgumentException("Missing JSON parameter: metadata");
         }
         
         JSONParser parser=new JSONParser();
         try {
 			jsonMetadata = (JSONArray) parser.parse(jsonParams);
 		} catch (ParseException e) {
-			throw new IllegalArgumentException("Invalid JSON parameter. Error while parsing JSON: " + e.toString());
+			throw new IllegalArgumentException("Invalid metadata JSON parameter. Error while parsing JSON: " + e.toString());
 		}
         
         props = getProperties();

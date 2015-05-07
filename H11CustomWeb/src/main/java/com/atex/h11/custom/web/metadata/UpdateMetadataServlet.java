@@ -30,6 +30,7 @@ import com.unisys.media.cr.common.data.types.IPropertyDefType;
 import com.unisys.media.cr.common.data.values.NodeTypePK;
 import com.unisys.media.cr.model.data.values.IPropertyValueClient;
 import com.unisys.media.extension.common.exception.NodeAlreadyLockedException;
+import com.unisys.media.ncm.cfg.common.data.values.CustomMetadataValue;
 import com.unisys.media.ncm.cfg.common.data.values.MetadataSchemaValue;
 import com.unisys.media.ncm.cfg.model.values.UserHermesCfgValueClient;
 
@@ -170,9 +171,6 @@ public class UpdateMetadataServlet extends HttpServlet {
 			NodeTypePK PK = new NodeTypePK(NCMDataSourceDescriptor.NODETYPE_NCMMETADATA);
 			metaMgr = (INCMMetadataNodeManager) ds.getNodeManager(PK);		
 			
-			NCMMetadataPropertyValue pValue = new NCMMetadataPropertyValue(
-					metaGroupDefType.getPK(), null, schema);
-			pValue.setMetadataValue(metaField, metaValue);
 			NCMCustomMetadataPK cmPk = new NCMCustomMetadataPK(
 					objId, (short) objVC.getType(), schemaId);
 			schemaId = schema.getId();
@@ -185,7 +183,25 @@ public class UpdateMetadataServlet extends HttpServlet {
 				}
 				NCMCustomMetadataJournal j = new NCMCustomMetadataJournal();
 				j.setCreateDuringUpdate(true);
-				metaMgr.updateMetadataGroup(schemaId, nodePKs, pValue, j);
+			
+				NCMMetadataPropertyValue pValue = new NCMMetadataPropertyValue(
+						metaGroupDefType.getPK(), null, schema);
+
+				// Get existing metadata fields from the current schema, and include in update
+				CustomMetadataValue[] metadataList = schema.getProperties();
+				for (int i = 0; i < metadataList.length; i++) {
+					CustomMetadataValue value = metadataList[i];
+					IPropertyValueClient pvc = (IPropertyValueClient) objVC.getProperty(value.getPK());
+					if (pvc != null) {
+						String pvcValue = pvc.getTextValue("UTF-8").toString();
+						pValue.setMetadataValue(value.getName(), (pvcValue != null) ? pvcValue : "");
+					}
+				}				
+				
+				pValue.setMetadataValue(metaField, metaValue);	// set passed value				
+				
+				metaMgr.updateMetadataGroup(schemaId, nodePKs, pValue, j);	// update
+
 				log("setMetadata: Update metadata successful for [" + objId.toString() + "," + objName + "," + Integer.toString(objVC.getType()) + "]");
 			} catch (Exception e) {
 				log("setMetadata: Update metadata failed for [" + objId.toString() + "," + objName + "," + Integer.toString(objVC.getType()) + "]: ", 

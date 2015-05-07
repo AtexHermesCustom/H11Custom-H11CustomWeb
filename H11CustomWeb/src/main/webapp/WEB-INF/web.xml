@@ -22,7 +22,11 @@
   <servlet-mapping>
     <servlet-name>ExportXMLServlet</servlet-name>
     <url-pattern>/ExportXML</url-pattern>
-  </servlet-mapping>  
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ExportXMLServlet</servlet-name>
+    <url-pattern>/exportxml</url-pattern>
+  </servlet-mapping>
   <servlet>
     <description>H11 Update Metadata Servlet</description>
     <display-name>UpdateMetadataServlet</display-name>
@@ -37,6 +41,10 @@
     <servlet-name>UpdateMetadataServlet</servlet-name>
     <url-pattern>/UpdateMetadata</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateMetadataServlet</servlet-name>
+    <url-pattern>/updatemetadata</url-pattern>
+  </servlet-mapping>  
   <servlet>
     <description>H11 Update Child Metadata Servlet</description>
     <display-name>UpdateChildMetadataServlet</display-name>
@@ -50,5 +58,9 @@
   <servlet-mapping>
     <servlet-name>UpdateChildMetadataServlet</servlet-name>
     <url-pattern>/UpdateChildMetadata</url-pattern>
-  </servlet-mapping>  
+  </servlet-mapping> 
+  <servlet-mapping>
+    <servlet-name>UpdateChildMetadataServlet</servlet-name>
+    <url-pattern>/updatechildmetadata</url-pattern>
+  </servlet-mapping>     
 </web-app>

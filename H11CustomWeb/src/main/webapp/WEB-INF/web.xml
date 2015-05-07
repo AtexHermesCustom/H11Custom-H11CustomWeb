@@ -18,7 +18,13 @@
   <servlet-mapping>
     <servlet-name>ExportXMLServlet</servlet-name>
     <url-pattern>/ExportXMLServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ExportXMLServlet</servlet-name>
     <url-pattern>/ExportXML</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ExportXMLServlet</servlet-name>
     <url-pattern>/exportxml</url-pattern>
   </servlet-mapping>
   <servlet>
@@ -30,7 +36,13 @@
   <servlet-mapping>
     <servlet-name>UpdateMetadataServlet</servlet-name>
     <url-pattern>/UpdateMetadataServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateMetadataServlet</servlet-name>
     <url-pattern>/UpdateMetadata</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateMetadataServlet</servlet-name>
     <url-pattern>/updatemetadata</url-pattern>
   </servlet-mapping>
   <servlet>
@@ -42,7 +54,13 @@
   <servlet-mapping>
     <servlet-name>UpdateChildMetadataServlet</servlet-name>
     <url-pattern>/UpdateChildMetadataServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateChildMetadataServlet</servlet-name>
     <url-pattern>/UpdateChildMetadata</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateChildMetadataServlet</servlet-name>
     <url-pattern>/updatechildmetadata</url-pattern>
   </servlet-mapping>
   <servlet>
@@ -54,7 +72,13 @@
   <servlet-mapping>
     <servlet-name>UpdateMultiMetadataServlet</servlet-name>
     <url-pattern>/UpdateMultiMetadataServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateMultiMetadataServlet</servlet-name>
     <url-pattern>/UpdateMultiMetadata</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateMultiMetadataServlet</servlet-name>
     <url-pattern>/updatemultimetadata</url-pattern>
   </servlet-mapping>
   <servlet>
@@ -66,7 +90,13 @@
   <servlet-mapping>
     <servlet-name>UpdateChildMultiMetadataServlet</servlet-name>
     <url-pattern>/UpdateChildMultiMetadataServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateChildMultiMetadataServlet</servlet-name>
     <url-pattern>/UpdateChildMultiMetadata</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UpdateChildMultiMetadataServlet</servlet-name>
     <url-pattern>/updatechildmultimetadata</url-pattern>
   </servlet-mapping>
 </web-app>

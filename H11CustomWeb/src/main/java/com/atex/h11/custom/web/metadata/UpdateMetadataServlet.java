@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.atex.h11.custom.common.DataSource;
 import com.atex.h11.custom.web.common.Constants;
+//import com.atex.h11.custom.web.common.CustomUtils;
 import com.unisys.media.cr.adapter.ncm.common.business.interfaces.INCMMetadataNodeManager;
 import com.unisys.media.cr.adapter.ncm.common.data.datasource.NCMDataSourceDescriptor;
 import com.unisys.media.cr.adapter.ncm.common.data.pk.NCMCustomMetadataPK;
@@ -52,6 +53,8 @@ public class UpdateMetadataServlet extends HttpServlet {
     protected String metaSchema;
     protected String metaField;
     protected String metaValue;
+    
+    protected String encoding;
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -81,14 +84,21 @@ public class UpdateMetadataServlet extends HttpServlet {
         response.setContentType("text/html;charset=" + Constants.DEFAULT_ENCODING);
         ServletOutputStream out = response.getOutputStream();
         
+        props = getProperties();	// custom properties
+        
+        encoding = Constants.DEFAULT_ENCODING;        
+        if (props.containsKey("paramEncoding")) {
+        	encoding = props.getProperty("paramEncoding").trim();
+        }        
+        
         user = request.getParameter("user");
         password = request.getParameter("password");
         sessionId = request.getParameter("sessionid");
         String objIdString = request.getParameter("id");
         
-        metaSchema = URLDecoder.decode(request.getParameter("schema"), Constants.DEFAULT_ENCODING);
-        metaField = URLDecoder.decode(request.getParameter("field"), Constants.DEFAULT_ENCODING);
-        metaValue = URLDecoder.decode(request.getParameter("value"), Constants.DEFAULT_ENCODING);
+        metaSchema = URLDecoder.decode(request.getParameter("schema"), encoding);
+        metaField = URLDecoder.decode(request.getParameter("field"), encoding);
+        metaValue = URLDecoder.decode(request.getParameter("value"), encoding);
 
         // check parameters
         if (objIdString == null || objIdString.isEmpty()) {
@@ -109,8 +119,6 @@ public class UpdateMetadataServlet extends HttpServlet {
         if (metaValue == null || metaValue.isEmpty()) {
         	throw new IllegalArgumentException("Missing parameter: value");
         }        
-        
-        props = getProperties();
         
         // get the datasource
         ds = getDatasource();
@@ -195,11 +203,12 @@ public class UpdateMetadataServlet extends HttpServlet {
 					CustomMetadataValue value = metadataList[i];
 					IPropertyValueClient pvc = (IPropertyValueClient) objVC.getProperty(value.getPK());
 					if (pvc != null) {
-						String pvcValue = pvc.getTextValue(Constants.DEFAULT_ENCODING).toString();
+						String pvcValue = pvc.getTextValue(encoding).toString();
 						pValue.setMetadataValue(value.getName(), (pvcValue != null) ? pvcValue : "");
 					}
 				}				
 				
+				//log("metaValue=" + metaValue + ", bytes=" + CustomUtils.getHexBytes(metaValue, encoding));				
 				pValue.setMetadataValue(metaField, metaValue);	// set passed value				
 				
 				metaMgr.updateMetadataGroup(schemaId, nodePKs, pValue, j);	// update

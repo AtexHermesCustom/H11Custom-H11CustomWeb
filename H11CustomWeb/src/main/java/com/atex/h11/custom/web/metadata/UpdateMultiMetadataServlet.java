@@ -17,6 +17,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.atex.h11.custom.web.common.Constants;
+//import com.atex.h11.custom.web.common.CustomUtils;
 import com.unisys.media.cr.adapter.ncm.common.data.pk.NCMObjectPK;
 import com.unisys.media.cr.adapter.ncm.common.data.values.NCMObjectBuildProperties;
 import com.unisys.media.cr.adapter.ncm.model.data.datasource.NCMDataSource;
@@ -59,13 +60,22 @@ public class UpdateMultiMetadataServlet extends UpdateMetadataServlet {
 		
         response.setContentType("text/html;charset=" + Constants.DEFAULT_ENCODING);
         ServletOutputStream out = response.getOutputStream();
+
+        props = getProperties();	// custom properties
         
+        encoding = Constants.DEFAULT_ENCODING;
+        if (props.containsKey("paramEncoding")) {
+        	encoding = props.getProperty("paramEncoding").trim();
+        }
+                
         user = request.getParameter("user");
         password = request.getParameter("password");
         sessionId = request.getParameter("sessionid");
         String objIdString = request.getParameter("id");
         
-        jsonParams = URLDecoder.decode(request.getParameter("metadata"), Constants.DEFAULT_ENCODING);
+        jsonParams = URLDecoder.decode(request.getParameter("metadata"), encoding);
+        //log("jsonParams=" + jsonParams);
+        //log("jsonParams bytes=" + CustomUtils.getHexBytes(jsonParams, encoding));
 
         // check parameters
         if (objIdString == null || objIdString.isEmpty()) {
@@ -88,8 +98,6 @@ public class UpdateMultiMetadataServlet extends UpdateMetadataServlet {
 		} catch (ParseException e) {
 			throw new IllegalArgumentException("Invalid metadata JSON parameter. Error while parsing JSON: " + e.toString());
 		}
-        
-        props = getProperties();
         
         // get the datasource
         ds = getDatasource();

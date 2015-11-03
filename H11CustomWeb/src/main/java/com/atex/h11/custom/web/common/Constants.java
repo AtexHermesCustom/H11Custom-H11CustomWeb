@@ -10,4 +10,6 @@ public interface Constants {
 	public static final String NODETYPE_PHYSPAGE = "pp";
 	public static final String NODETYPE_EDITION = "ed";
 	public static final String NODETYPE_NEWSPAPER = "np";
+	
+	public static final String DEFAULT_ENCODING = "UTF-8";
 }

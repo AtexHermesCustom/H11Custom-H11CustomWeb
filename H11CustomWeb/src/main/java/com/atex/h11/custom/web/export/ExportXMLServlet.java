@@ -60,7 +60,7 @@ public class ExportXMLServlet extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		logParameters(request.getParameterMap());
 		
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/html;charset=" + Constants.DEFAULT_ENCODING);
         PrintWriter out = response.getWriter();
         
         NCMDataSource ds = null;

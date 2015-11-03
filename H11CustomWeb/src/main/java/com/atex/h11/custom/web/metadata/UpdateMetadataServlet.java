@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
@@ -77,16 +78,17 @@ public class UpdateMetadataServlet extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         logParameters(request.getParameterMap());
 		
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/html;charset=" + Constants.DEFAULT_ENCODING);
         ServletOutputStream out = response.getOutputStream();
         
         user = request.getParameter("user");
         password = request.getParameter("password");
         sessionId = request.getParameter("sessionid");
         String objIdString = request.getParameter("id");
-        metaSchema = request.getParameter("schema");
-        metaField = request.getParameter("field");
-        metaValue = request.getParameter("value");
+        
+        metaSchema = URLDecoder.decode(request.getParameter("schema"), Constants.DEFAULT_ENCODING);
+        metaField = URLDecoder.decode(request.getParameter("field"), Constants.DEFAULT_ENCODING);
+        metaValue = URLDecoder.decode(request.getParameter("value"), Constants.DEFAULT_ENCODING);
 
         // check parameters
         if (objIdString == null || objIdString.isEmpty()) {
@@ -193,7 +195,7 @@ public class UpdateMetadataServlet extends HttpServlet {
 					CustomMetadataValue value = metadataList[i];
 					IPropertyValueClient pvc = (IPropertyValueClient) objVC.getProperty(value.getPK());
 					if (pvc != null) {
-						String pvcValue = pvc.getTextValue("UTF-8").toString();
+						String pvcValue = pvc.getTextValue(Constants.DEFAULT_ENCODING).toString();
 						pValue.setMetadataValue(value.getName(), (pvcValue != null) ? pvcValue : "");
 					}
 				}				

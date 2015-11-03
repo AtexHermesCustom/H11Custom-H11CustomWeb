@@ -1,6 +1,7 @@
 package com.atex.h11.custom.web.metadata;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -15,6 +16,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.atex.h11.custom.web.common.Constants;
 import com.unisys.media.cr.adapter.ncm.common.data.pk.NCMObjectPK;
 import com.unisys.media.cr.adapter.ncm.common.data.values.NCMObjectBuildProperties;
 import com.unisys.media.cr.adapter.ncm.model.data.datasource.NCMDataSource;
@@ -55,14 +57,15 @@ public class UpdateMultiMetadataServlet extends UpdateMetadataServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         logParameters(request.getParameterMap());
 		
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/html;charset=" + Constants.DEFAULT_ENCODING);
         ServletOutputStream out = response.getOutputStream();
         
         user = request.getParameter("user");
         password = request.getParameter("password");
         sessionId = request.getParameter("sessionid");
         String objIdString = request.getParameter("id");
-        jsonParams = request.getParameter("metadata");
+        
+        jsonParams = URLDecoder.decode(request.getParameter("metadata"), Constants.DEFAULT_ENCODING);
 
         // check parameters
         if (objIdString == null || objIdString.isEmpty()) {

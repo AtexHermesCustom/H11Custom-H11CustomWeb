@@ -223,7 +223,7 @@ public class UpdateMetadataServlet extends HttpServlet {
 		int delimIdx = s.indexOf(":");
 		if (delimIdx >= 0)
 			s = s.substring(0, delimIdx);
-		return Integer.parseInt(s);
+		return Integer.parseInt(s); 
 		*/
 		return ((NCMObjectPK) pk).getObjId();
 	}	        
